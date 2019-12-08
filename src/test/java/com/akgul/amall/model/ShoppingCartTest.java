@@ -167,4 +167,15 @@ public class ShoppingCartTest {
 
         Assert.isTrue(shoppingCart.getTotalAmountAfterDiscounts() == 90, "After biggest amount campaign applied, total amount should get from campaign1");
     }
+
+    @Test
+    public void shouldGetCouponDiscountWhenItsAvailable() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+
+        Coupon coupon = new Coupon(BigDecimal.TEN, BigDecimal.ZERO, DiscountType.AMOUNT);
+        shoppingCart.applyCoupon(coupon);
+
+        Assert.isTrue(shoppingCart.getCouponDiscount() == 10, "After coupon applied, coupon discount should be accessible from method.");
+    }
 }
