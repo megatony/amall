@@ -1,5 +1,6 @@
 package com.akgul.amall.model;
 
+import com.akgul.amall.enums.DiscountType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -50,6 +51,9 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected BigDecimal getDiscountAmount(BigDecimal totalPrice, Campaign discount) {
-        return BigDecimal.ZERO;
+        if (discount.getDiscountType().equals(DiscountType.RATE)) {
+            return totalPrice.multiply(discount.getDiscountAmount().divide(BigDecimal.valueOf(100)));
+        }
+        return discount.getDiscountAmount();
     }
 }

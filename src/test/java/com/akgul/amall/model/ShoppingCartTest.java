@@ -105,6 +105,7 @@ public class ShoppingCartTest {
         BigDecimal totalPrice = BigDecimal.valueOf(50);
 
         BigDecimal discountAmount = shoppingCart.getDiscountAmount(totalPrice, rateCampaign);
-        Assert.isTrue(discountAmount.equals(BigDecimal.valueOf(12.5)), "50 total price's 25% should be 12.5");
+        Assert.isTrue(discountAmount.doubleValue() == 12.50);
+
     }
 }
