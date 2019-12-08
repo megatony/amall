@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -27,7 +28,25 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected void applyDiscounts(Campaign discount1, Campaign discount2, Campaign discount3) {
+        BigDecimal discount1Amount = getDiscountAmount(totalPrice, discount1);;
+        BigDecimal discount2Amount = getDiscountAmount(totalPrice, discount2);;
+        BigDecimal discount3Amount = getDiscountAmount(totalPrice, discount3);;
 
+        HashMap<BigDecimal, Campaign> amountWithCampaigns = new HashMap<>();
+
+        amountWithCampaigns.put(discount1Amount, discount1);
+        amountWithCampaigns.put(discount2Amount, discount2);
+        amountWithCampaigns.put(discount3Amount, discount3);
+
+        Map.Entry<BigDecimal, Campaign> selected = amountWithCampaigns.entrySet()
+                .stream().sorted((t0, t1) -> t1.getKey().compareTo(t0.getKey())).findFirst().get();
+
+        if (!(selected.getKey().doubleValue() > 0)) {
+            return;
+        }
+
+        cartCampaign = selected.getValue();
+        totalDiscount = selected.getKey();
     }
 
     protected double getTotalAmountAfterDiscounts() {
