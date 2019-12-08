@@ -1,6 +1,7 @@
 package com.akgul.amall.model;
 
 import com.akgul.amall.enums.DiscountType;
+import com.akgul.amall.utils.DeliveryCostCalculator;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -93,7 +94,8 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected double getDeliveryCost() {
-        return 0;
+        DeliveryCostCalculator costCalculator = new DeliveryCostCalculator(COST_PER_DELIVERY, COST_PER_PRODUCT, FIXED_COST);
+        return costCalculator.calculateFor(this);
     }
 
     protected String print() {
