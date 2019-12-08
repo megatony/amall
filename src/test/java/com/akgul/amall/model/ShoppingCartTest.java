@@ -105,7 +105,41 @@ public class ShoppingCartTest {
         BigDecimal totalPrice = BigDecimal.valueOf(50);
 
         BigDecimal discountAmount = shoppingCart.getDiscountAmount(totalPrice, rateCampaign);
-        Assert.isTrue(discountAmount.doubleValue() == 12.50);
+        Assert.isTrue(discountAmount.doubleValue() == 12.50, "Should get discount amount as amount not rate.");
 
+    }
+
+    @Test
+    public void shouldNotApplyWhenCartTotalIsLessThanCouponMinimumAmount() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.ONE);
+
+        Coupon coupon = new Coupon(BigDecimal.ONE, BigDecimal.TEN, DiscountType.AMOUNT);
+        shoppingCart.applyCoupon(coupon);
+        Assert.isNull(shoppingCart.getCartCoupon(), "Should not apply coupon discount because of amount limit.");
+    }
+
+    @Test
+    public void shouldApplyCouponToCartWhenCategoryDiscountIsNotAvailable() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setCartCampaign(null);
+
+        Coupon coupon = new Coupon(BigDecimal.ONE, BigDecimal.TEN, DiscountType.AMOUNT);
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+        shoppingCart.applyCoupon(coupon);
+
+        Assert.isTrue(shoppingCart.getTotalDiscount().doubleValue() == 1, "After coupon discount applied, amount should be equal to coupon discount.");
+    }
+
+    @Test
+    public void shouldApplyCouponDiscountWithAmountWhenDiscountTypeIsRate() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setCartCampaign(null);
+
+        Coupon coupon = new Coupon(BigDecimal.TEN, BigDecimal.TEN, DiscountType.RATE);
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(50));
+        shoppingCart.applyCoupon(coupon);
+
+        Assert.isTrue(shoppingCart.getTotalDiscount().doubleValue() == 5, "After coupon discount applied, total discount should be amount not rate.");
     }
 }

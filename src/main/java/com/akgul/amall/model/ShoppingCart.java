@@ -28,9 +28,9 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected void applyDiscounts(Campaign discount1, Campaign discount2, Campaign discount3) {
-        BigDecimal discount1Amount = getDiscountAmount(totalPrice, discount1);;
-        BigDecimal discount2Amount = getDiscountAmount(totalPrice, discount2);;
-        BigDecimal discount3Amount = getDiscountAmount(totalPrice, discount3);;
+        BigDecimal discount1Amount = getDiscountAmount(totalPrice, discount1);
+        BigDecimal discount2Amount = getDiscountAmount(totalPrice, discount2);
+        BigDecimal discount3Amount = getDiscountAmount(totalPrice, discount3);
 
         HashMap<BigDecimal, Campaign> amountWithCampaigns = new HashMap<>();
 
@@ -48,6 +48,8 @@ public class ShoppingCart extends AmallObject {
         cartCampaign = selected.getValue();
         totalDiscount = selected.getKey();
     }
+
+    protected void applyCoupon(Coupon coupon) {}
 
     protected double getTotalAmountAfterDiscounts() {
         return 0;
