@@ -17,6 +17,7 @@ public class ShoppingCart extends AmallObject {
     private static final BigDecimal FIXED_COST = BigDecimal.valueOf(2.99);
 
     private HashMap<Product, Long> items = new HashMap<>();
+    private long totalProductQuantity;
     private Campaign cartCampaign;
     private Coupon cartCoupon;
     private BigDecimal totalPrice = BigDecimal.ZERO;
@@ -29,10 +30,12 @@ public class ShoppingCart extends AmallObject {
         }
 
         totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        totalProductQuantity += quantity;
         items.put(product, quantity);
     }
 
     protected void applyDiscounts(Campaign discount1, Campaign discount2, Campaign discount3) {
+
         BigDecimal discount1Amount = getDiscountAmount(totalPrice, discount1);
         BigDecimal discount2Amount = getDiscountAmount(totalPrice, discount2);
         BigDecimal discount3Amount = getDiscountAmount(totalPrice, discount3);
@@ -44,9 +47,11 @@ public class ShoppingCart extends AmallObject {
         amountWithCampaigns.put(discount3Amount, discount3);
 
         Map.Entry<BigDecimal, Campaign> selected = amountWithCampaigns.entrySet()
-                .stream().sorted((t0, t1) -> t1.getKey().compareTo(t0.getKey())).findFirst().get();
+                .stream()
+                .sorted((t0, t1) -> t1.getKey().compareTo(t0.getKey()))
+                .filter(t0 -> totalProductQuantity >= t0.getValue().getMinimumQuantity()).findFirst().orElse(null);
 
-        if (!(selected.getKey().doubleValue() > 0)) {
+        if (selected == null || !(selected.getKey().doubleValue() > 0)) {
             return;
         }
 

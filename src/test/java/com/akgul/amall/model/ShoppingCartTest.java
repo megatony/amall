@@ -267,4 +267,18 @@ public class ShoppingCartTest {
                 "SecondCategory, SecondProduct, 5, 1, 5, 0.5\n" +
                 "9.0, 12.99"), "Should return exact string.");
     }
+
+    @Test
+    public void shouldNotApplyCampaignWhenMinimumQuantityIsNotValid() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+        shoppingCart.setTotalProductQuantity(1);
+        Category category = new Category("TestCategory");
+        Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 2, DiscountType.AMOUNT);
+        Campaign campaign2 = new Campaign(category, BigDecimal.ONE, 2, DiscountType.AMOUNT);
+        Campaign campaign3 = new Campaign(category, BigDecimal.ZERO, 2, DiscountType.AMOUNT);
+        shoppingCart.applyDiscounts(campaign1, campaign2, campaign3);
+
+        Assert.isNull(shoppingCart.getCartCampaign(), "Minimum quantity control is not valid, campaign shouldn't be applied.");
+    }
 }
