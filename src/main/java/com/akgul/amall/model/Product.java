@@ -19,4 +19,5 @@ public class Product extends AmallObject {
     private BigDecimal price;
     private Category category;
     private long amount;
+    private long quantity;
 }
