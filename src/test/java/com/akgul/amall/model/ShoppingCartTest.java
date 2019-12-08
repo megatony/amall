@@ -242,10 +242,12 @@ public class ShoppingCartTest {
     @Test
     public void shouldPrintWithFormatWhenCampaignApplied() {
         Category firstCategory = new Category("FirstCategory");
+        firstCategory.setId(1);
         Product firstProduct = new Product("FirstProduct", BigDecimal.ONE, firstCategory);
         firstProduct.setQuantity(10);
 
         Category secondCategory = new Category("SecondCategory");
+        secondCategory.setId(2);
         Product secondProduct = new Product("SecondProduct", BigDecimal.ONE, secondCategory);
         secondProduct.setQuantity(10);
 
@@ -254,15 +256,15 @@ public class ShoppingCartTest {
         shoppingCart.addItem(secondProduct, 5);
 
         Category category = new Category("TestCategory");
-        Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
+        Campaign campaign1 = new Campaign(category, BigDecimal.ONE, 1, DiscountType.AMOUNT);
         Campaign campaign2 = new Campaign(category, BigDecimal.ONE, 1, DiscountType.AMOUNT);
         Campaign campaign3 = new Campaign(category, BigDecimal.ZERO, 1, DiscountType.AMOUNT);
         shoppingCart.applyDiscounts(campaign1, campaign2, campaign3);
 
-        Assert.hasText(shoppingCart.print(), "FirstCategory products\n" +
-                "FirstCategory, FirstProduct, 5, 1.00, 5.00, 0.10\n" +
+        Assert.isTrue(shoppingCart.print().equals("FirstCategory products\n" +
+                "FirstCategory, FirstProduct, 5, 1, 5, 0.5\n" +
                 "SecondCategory products\n" +
-                "SecondCategory, SecondProduct, 5, 1.00, 5.00, 0.10\n" +
-                "9.00, 10.99");
+                "SecondCategory, SecondProduct, 5, 1, 5, 0.5\n" +
+                "9.0, 12.99"), "Should return exact string.");
     }
 }

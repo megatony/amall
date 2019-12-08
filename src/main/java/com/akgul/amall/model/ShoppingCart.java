@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -95,11 +95,34 @@ public class ShoppingCart extends AmallObject {
 
     protected double getDeliveryCost() {
         DeliveryCostCalculator costCalculator = new DeliveryCostCalculator(COST_PER_DELIVERY, COST_PER_PRODUCT, FIXED_COST);
-        return costCalculator.calculateFor(this);
+        deliveryCost = BigDecimal.valueOf(costCalculator.calculateFor(this));
+        return deliveryCost.doubleValue();
     }
 
     protected String print() {
-        return "";
+        StringBuilder builder = new StringBuilder();
+        ArrayList<Category> categories = items.entrySet().stream().map(x->x.getKey().getCategory()).sorted(Comparator.comparingLong(x->x.getId())).collect(Collectors.toCollection(ArrayList::new));
+
+        for (Category category : categories) {
+            builder.append(category.getName()).append(" products\n");
+            for (Map.Entry<Product, Long> item : items.entrySet()) {
+                if (item.getKey().getCategory().equals(category)) {
+                    Product product = item.getKey();
+                    builder.append(product.getCategory().getName() + ", ");
+                    builder.append(product.getName() + ", ");
+                    builder.append(item.getValue() + ", ");
+                    builder.append(product.getPrice() + ", ");
+
+                    BigDecimal totalProductPrice = product.getPrice().multiply(BigDecimal.valueOf(item.getValue()));
+                    builder.append(totalProductPrice + ", ");
+                    builder.append(totalDiscount.divide(totalPrice).multiply(totalProductPrice) + "\n");
+                }
+            }
+        }
+
+        builder.append(getTotalAmountAfterDiscounts() + ", " + getDeliveryCost());
+
+        return builder.toString();
     }
 
     protected BigDecimal getDiscountAmount(BigDecimal totalPrice, Campaign discount) {

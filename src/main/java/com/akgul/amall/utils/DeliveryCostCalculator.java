@@ -40,7 +40,7 @@ public class DeliveryCostCalculator {
         deliveryCount = categories.size();
 
         return costPerDelivery.multiply(BigDecimal.valueOf(deliveryCount))
-                .add(costPerProduct.multiply(BigDecimal.valueOf(productCount)))
+                .add(costPerProduct.multiply(BigDecimal.valueOf(items.size())))
                 .add(fixedCost).doubleValue();
     }
 }
