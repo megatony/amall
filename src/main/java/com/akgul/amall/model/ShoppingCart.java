@@ -11,6 +11,10 @@ public class ShoppingCart extends AmallObject {
     private HashMap<Product, Long> items = new HashMap<>();
 
     protected void addItem(Product product, long quantity) {
+        if (quantity == 0 || product.getQuantity() < quantity) {
+            return;
+        }
 
+        items.put(product, quantity);
     }
 }
