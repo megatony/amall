@@ -8,5 +8,9 @@ import java.util.HashMap;
 @Getter
 @Setter
 public class ShoppingCart extends AmallObject {
-    HashMap<Product, Long> items;
+    private HashMap<Product, Long> items = new HashMap<>();
+
+    protected void addItem(Product product, long quantity) {
+
+    }
 }
