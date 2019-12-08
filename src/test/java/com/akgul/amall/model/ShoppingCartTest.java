@@ -142,4 +142,29 @@ public class ShoppingCartTest {
 
         Assert.isTrue(shoppingCart.getTotalDiscount().doubleValue() == 5, "After coupon discount applied, total discount should be amount not rate.");
     }
+
+    @Test
+    public void shouldGetTotalAmountAfterDiscountsWhenCampaignApplied() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+
+        Category category = new Category("TestCategory");
+        Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
+        Campaign campaign2 = new Campaign(category, BigDecimal.ONE, 1, DiscountType.AMOUNT);
+        Campaign campaign3 = new Campaign(category, BigDecimal.ZERO, 1, DiscountType.AMOUNT);
+        shoppingCart.applyDiscounts(campaign1, campaign2, campaign3);
+
+        Assert.isTrue(shoppingCart.getTotalAmountAfterDiscounts() == 90, "After biggest amount campaign applied, total amount should get from campaign1");
+    }
+
+    @Test
+    public void shouldGetTotalAmountAfterDiscountsWhenCouponApplied() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+
+        Coupon coupon = new Coupon(BigDecimal.TEN, BigDecimal.ZERO, DiscountType.AMOUNT);
+        shoppingCart.applyCoupon(coupon);
+
+        Assert.isTrue(shoppingCart.getTotalAmountAfterDiscounts() == 90, "After biggest amount campaign applied, total amount should get from campaign1");
+    }
 }
