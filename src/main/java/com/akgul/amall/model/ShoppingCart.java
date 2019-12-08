@@ -12,15 +12,16 @@ public class ShoppingCart extends AmallObject {
     private HashMap<Product, Long> items = new HashMap<>();
     private Campaign cartCampaign;
     private Coupon cartCoupon;
-    private BigDecimal totalPrice;
-    private BigDecimal totalDiscount;
-    private BigDecimal deliveryCost;
+    private BigDecimal totalPrice = BigDecimal.ZERO;
+    private BigDecimal totalDiscount = BigDecimal.ZERO;
+    private BigDecimal deliveryCost = BigDecimal.ZERO;
 
     public void addItem(Product product, long quantity) {
         if (quantity == 0 || product.getQuantity() < quantity) {
             return;
         }
 
+        totalPrice = totalPrice.add(product.getPrice().multiply(BigDecimal.valueOf(quantity)));
         items.put(product, quantity);
     }
 
