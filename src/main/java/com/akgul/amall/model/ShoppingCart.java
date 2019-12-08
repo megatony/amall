@@ -71,7 +71,7 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected double getTotalAmountAfterDiscounts() {
-        return 0;
+        return totalPrice.subtract(totalDiscount).doubleValue();
     }
 
     protected double getCouponDiscount() {
