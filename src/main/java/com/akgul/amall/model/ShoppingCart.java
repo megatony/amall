@@ -48,4 +48,8 @@ public class ShoppingCart extends AmallObject {
     protected String print() {
         return "";
     }
+
+    protected BigDecimal getDiscountAmount(BigDecimal totalPrice, Campaign discount) {
+        return BigDecimal.ZERO;
+    }
 }

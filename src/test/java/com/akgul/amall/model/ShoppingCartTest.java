@@ -95,4 +95,16 @@ public class ShoppingCartTest {
 
         Assert.isNull(shoppingCart.getCartCampaign(), "Should not be applied when campaign values are zero.");
     }
+
+    @Test
+    public void shouldGetDiscountAmountWhenDiscountTypeIsRate() {
+        Category category = new Category("TestCategory");
+        Campaign rateCampaign = new Campaign(category, BigDecimal.valueOf(25), 1, DiscountType.RATE);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        BigDecimal totalPrice = BigDecimal.valueOf(50);
+
+        BigDecimal discountAmount = shoppingCart.getDiscountAmount(totalPrice, rateCampaign);
+        Assert.isTrue(discountAmount.equals(BigDecimal.valueOf(12.5)), "50 total price's 25% should be 12.5");
+    }
 }
