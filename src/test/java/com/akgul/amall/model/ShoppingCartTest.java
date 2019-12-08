@@ -214,4 +214,55 @@ public class ShoppingCartTest {
 
         Assert.isTrue(expectedDeliveryCost == shoppingCart.getDeliveryCost(), "Should get delivery cost.");
     }
+
+    @Test
+    public void shouldPrintWithFormatWhenCouponApplied() {
+        Category firstCategory = new Category("FirstCategory");
+        Product firstProduct = new Product("FirstProduct", BigDecimal.ONE, firstCategory);
+        firstProduct.setQuantity(10);
+
+        Category secondCategory = new Category("SecondCategory");
+        Product secondProduct = new Product("SecondProduct", BigDecimal.ONE, secondCategory);
+        secondProduct.setQuantity(10);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.addItem(firstProduct, 5);
+        shoppingCart.addItem(secondProduct, 5);
+
+        Coupon coupon = new Coupon(BigDecimal.TEN, BigDecimal.ZERO, DiscountType.AMOUNT);
+        shoppingCart.applyCoupon(coupon);
+
+        Assert.hasText(shoppingCart.print(), "FirstCategory products\n" +
+                "FirstCategory, FirstProduct, 5, 1.00, 5.00, 0.10\n" +
+                "SecondCategory products\n" +
+                "SecondCategory, SecondProduct, 5, 1.00, 5.00, 0.10\n" +
+                "9.00, 10.99");
+    }
+
+    @Test
+    public void shouldPrintWithFormatWhenCampaignApplied() {
+        Category firstCategory = new Category("FirstCategory");
+        Product firstProduct = new Product("FirstProduct", BigDecimal.ONE, firstCategory);
+        firstProduct.setQuantity(10);
+
+        Category secondCategory = new Category("SecondCategory");
+        Product secondProduct = new Product("SecondProduct", BigDecimal.ONE, secondCategory);
+        secondProduct.setQuantity(10);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.addItem(firstProduct, 5);
+        shoppingCart.addItem(secondProduct, 5);
+
+        Category category = new Category("TestCategory");
+        Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
+        Campaign campaign2 = new Campaign(category, BigDecimal.ONE, 1, DiscountType.AMOUNT);
+        Campaign campaign3 = new Campaign(category, BigDecimal.ZERO, 1, DiscountType.AMOUNT);
+        shoppingCart.applyDiscounts(campaign1, campaign2, campaign3);
+
+        Assert.hasText(shoppingCart.print(), "FirstCategory products\n" +
+                "FirstCategory, FirstProduct, 5, 1.00, 5.00, 0.10\n" +
+                "SecondCategory products\n" +
+                "SecondCategory, SecondProduct, 5, 1.00, 5.00, 0.10\n" +
+                "9.00, 10.99");
+    }
 }
