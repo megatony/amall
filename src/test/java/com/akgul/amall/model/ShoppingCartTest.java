@@ -178,4 +178,18 @@ public class ShoppingCartTest {
 
         Assert.isTrue(shoppingCart.getCouponDiscount() == 10, "After coupon applied, coupon discount should be accessible from method.");
     }
+
+    @Test
+    public void shouldGetCampaignDiscount() {
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+
+        Category category = new Category("TestCategory");
+        Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
+        Campaign campaign2 = new Campaign(category, BigDecimal.ONE, 1, DiscountType.AMOUNT);
+        Campaign campaign3 = new Campaign(category, BigDecimal.ZERO, 1, DiscountType.AMOUNT);
+        shoppingCart.applyDiscounts(campaign1, campaign2, campaign3);
+
+        Assert.isTrue(shoppingCart.getCampaignDiscount() == 10, "After biggest amount campaign applied, campaign discount should be accessible.");
+    }
 }

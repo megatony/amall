@@ -75,7 +75,10 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected double getCouponDiscount() {
-        return 0;
+        if (cartCampaign != null || cartCoupon == null) {
+            return 0;
+        }
+        return totalDiscount.doubleValue();
     }
 
     protected double getCampaignDiscount() {
