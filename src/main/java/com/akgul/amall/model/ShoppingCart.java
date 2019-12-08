@@ -16,7 +16,7 @@ public class ShoppingCart extends AmallObject {
     private BigDecimal totalDiscount;
     private BigDecimal deliveryCost;
 
-    protected void addItem(Product product, long quantity) {
+    public void addItem(Product product, long quantity) {
         if (quantity == 0 || product.getQuantity() < quantity) {
             return;
         }
