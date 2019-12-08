@@ -49,7 +49,26 @@ public class ShoppingCart extends AmallObject {
         totalDiscount = selected.getKey();
     }
 
-    protected void applyCoupon(Coupon coupon) {}
+    protected void applyCoupon(Coupon coupon) {
+        BigDecimal couponDiscountAmount;
+
+        if (totalPrice.compareTo(coupon.getMinimumPurchaseAmount()) <= 0) {
+            return;
+        }
+
+        if (coupon.getDiscountType().equals(DiscountType.RATE)) {
+            couponDiscountAmount = totalPrice.multiply(coupon.getCouponAmount().divide(BigDecimal.valueOf(100)));
+        } else {
+            couponDiscountAmount = coupon.getCouponAmount();
+        }
+
+        if (!(couponDiscountAmount.doubleValue() > 0)) {
+            return;
+        }
+
+        cartCoupon = coupon;
+        totalDiscount = couponDiscountAmount;
+    }
 
     protected double getTotalAmountAfterDiscounts() {
         return 0;
