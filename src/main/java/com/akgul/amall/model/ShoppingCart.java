@@ -11,6 +11,10 @@ import java.util.Map;
 @Getter
 @Setter
 public class ShoppingCart extends AmallObject {
+    private static final BigDecimal COST_PER_DELIVERY = BigDecimal.valueOf(2);
+    private static final BigDecimal COST_PER_PRODUCT = BigDecimal.valueOf(3);
+    private static final BigDecimal FIXED_COST = BigDecimal.valueOf(2.99);
+
     private HashMap<Product, Long> items = new HashMap<>();
     private Campaign cartCampaign;
     private Coupon cartCoupon;
@@ -82,7 +86,10 @@ public class ShoppingCart extends AmallObject {
     }
 
     protected double getCampaignDiscount() {
-        return 0;
+        if (cartCampaign == null) {
+            return 0;
+        }
+        return totalDiscount.doubleValue();
     }
 
     protected double getDeliveryCost() {

@@ -27,7 +27,7 @@ public class DeliveryCostCalculator {
     private long deliveryCount = 0;
     private long productCount = 0;
 
-    protected double calculateFor(ShoppingCart cart) {
+    public double calculateFor(ShoppingCart cart) {
         HashMap<Product, Long> items = cart.getItems();
         HashSet<Category> categories = new HashSet<>();
 

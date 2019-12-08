@@ -192,4 +192,26 @@ public class ShoppingCartTest {
 
         Assert.isTrue(shoppingCart.getCampaignDiscount() == 10, "After biggest amount campaign applied, campaign discount should be accessible.");
     }
+
+    @Test
+    public void shouldGetDeliveryCost() {
+        Category firstCategory = new Category("FirstCategory");
+        Product firstProduct = new Product("FirstProduct", BigDecimal.ONE, firstCategory);
+        firstProduct.setQuantity(10);
+
+        Category secondCategory = new Category("SecondCategory");
+        Product secondProduct = new Product("SecondProduct", BigDecimal.ONE, secondCategory);
+        secondProduct.setQuantity(10);
+
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.addItem(firstProduct, 1);
+        shoppingCart.addItem(secondProduct, 1);
+
+        BigDecimal costPerDelivery = BigDecimal.valueOf(2.0);
+        BigDecimal costPerProduct = BigDecimal.valueOf(3.0);
+        BigDecimal fixedCost = BigDecimal.valueOf(2.99);
+        double expectedDeliveryCost = (costPerDelivery.multiply(BigDecimal.valueOf(2))).add(costPerProduct.multiply(BigDecimal.valueOf(2))).add(fixedCost).doubleValue();
+
+        Assert.isTrue(expectedDeliveryCost == shoppingCart.getDeliveryCost(), "Should get delivery cost.");
+    }
 }
