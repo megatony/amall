@@ -147,6 +147,7 @@ public class ShoppingCartTest {
     public void shouldGetTotalAmountAfterDiscountsWhenCampaignApplied() {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+        shoppingCart.setTotalProductQuantity(25);
 
         Category category = new Category("TestCategory");
         Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
@@ -183,6 +184,7 @@ public class ShoppingCartTest {
     public void shouldGetCampaignDiscount() {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setTotalPrice(BigDecimal.valueOf(100));
+        shoppingCart.setTotalProductQuantity(25);
 
         Category category = new Category("TestCategory");
         Campaign campaign1 = new Campaign(category, BigDecimal.TEN, 1, DiscountType.AMOUNT);
